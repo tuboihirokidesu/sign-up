@@ -36,15 +36,15 @@ const schema = yup.object().shape({
   firstName: yup
     .string()
     .matches(/^([^0-9]*)$/, "数字は使えません")
-    .required("First name is a required field"),
+    .required("必須項目です"),
   lastName: yup
     .string()
     .matches(/^([^0-9]*)$/, "数字は使えません")
-    .required("Last name is a required field"),
+    .required("必須項目です"),
   email: yup
     .string()
     .email("正しいメールアドレスを指定してください。")
-    .required("Email is a required field"),
+    .required("メールアドレスは必須項目です"),
 });
 
 const SignUp = () => {
