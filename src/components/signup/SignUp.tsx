@@ -52,10 +52,7 @@ const SignUp = () => {
 
   const [formKey, setFormKey] = useState(0);
 
-  const [values, setValue] = useState<FormValues>({
-    firstName: "",
-    lastName: "",
-    email: "",
+  const [values, setValue] = useState({
     password: "",
     showPassword: false,
   });
@@ -70,9 +67,6 @@ const SignUp = () => {
     alert(JSON.stringify(data));
     setFormKey((prev) => prev + 1);
     setValue({
-      firstName: "",
-      lastName: "",
-      email: "",
       password: "",
       showPassword: false,
     });
@@ -109,9 +103,9 @@ const SignUp = () => {
                   inputRef={register}
                   label='First Name'
                   name='firstName'
-                  onChange={(e) =>
-                    setValue({ ...values, firstName: e.target.value })
-                  }
+                  // onChange={(e) =>
+                  //   setValue({ ...values, firstName: e.target.value })
+                  // }
                   required
                   variant='outlined'
                 />
@@ -126,9 +120,9 @@ const SignUp = () => {
                   inputRef={register}
                   label='Last Name'
                   name='lastName'
-                  onChange={(e) =>
-                    setValue({ ...values, lastName: e.target.value })
-                  }
+                  // onChange={(e) =>
+                  //   setValue({ ...values, lastName: e.target.value })
+                  // }
                   required
                   variant='outlined'
                 />
@@ -143,24 +137,14 @@ const SignUp = () => {
                   inputRef={register({ required: true })}
                   label='Email Address'
                   name='email'
-                  onChange={(e) =>
-                    setValue({ ...values, email: e.target.value })
-                  }
+                  // onChange={(e) =>
+                  //   setValue({ ...values, email: e.target.value })
+                  // }
                   required
                   variant='outlined'
                 />
               </Grid>
               <Grid item xs={12}>
-                {/* <TextField
-                variant='outlined'
-                required
-                fullWidth
-                name='password'
-                label='Password'
-                type='password'
-                id='password'
-                autoComplete='current-password'
-                /> */}
                 <FormControl className={classes.inputField} variant='outlined'>
                   <InputLabel htmlFor='outlined-adornment-password'>
                     Password
@@ -210,13 +194,6 @@ const SignUp = () => {
             >
               Sign Up
             </Button>
-            {/* <Grid container justify='flex-end'>
-            <Grid item>
-              <Link href='#' variant='body2'>
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid> */}
           </form>
         </main>
       </div>
