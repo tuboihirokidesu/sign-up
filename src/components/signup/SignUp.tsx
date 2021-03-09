@@ -50,6 +50,8 @@ const schema = yup.object().shape({
 const SignUp = () => {
   const classes = useStyles();
 
+  const [formKey, setFormKey] = useState(0);
+
   const [values, setValue] = useState<FormValues>({
     firstName: "",
     lastName: "",
@@ -57,6 +59,7 @@ const SignUp = () => {
     password: "",
     showPassword: false,
   });
+  console.log(values);
 
   const { register, handleSubmit, errors } = useForm<FormValues>({
     mode: "onBlur",
@@ -65,6 +68,14 @@ const SignUp = () => {
 
   const onSubmit = handleSubmit((data) => {
     alert(JSON.stringify(data));
+    setFormKey((prev) => prev + 1);
+    setValue({
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      showPassword: false,
+    });
   });
 
   const handleClickShowPassword = () => {
@@ -75,7 +86,7 @@ const SignUp = () => {
   };
 
   return (
-    <Container component='main' maxWidth='xs'>
+    <Container component='main' maxWidth='xs' key={formKey}>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -98,6 +109,9 @@ const SignUp = () => {
                   inputRef={register}
                   label='First Name'
                   name='firstName'
+                  onChange={(e) =>
+                    setValue({ ...values, firstName: e.target.value })
+                  }
                   required
                   variant='outlined'
                 />
@@ -112,6 +126,9 @@ const SignUp = () => {
                   inputRef={register}
                   label='Last Name'
                   name='lastName'
+                  onChange={(e) =>
+                    setValue({ ...values, lastName: e.target.value })
+                  }
                   required
                   variant='outlined'
                 />
@@ -126,6 +143,9 @@ const SignUp = () => {
                   inputRef={register({ required: true })}
                   label='Email Address'
                   name='email'
+                  onChange={(e) =>
+                    setValue({ ...values, email: e.target.value })
+                  }
                   required
                   variant='outlined'
                 />
