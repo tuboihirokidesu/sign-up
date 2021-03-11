@@ -32,6 +32,10 @@ type FormValues = {
   showPassword?: boolean;
 };
 
+const lowercaseRegex = /(?=.*[a-z])/;
+const uppercaseRegex = /(?=.*[A-Z])/;
+const numericRegex = /(?=.*[0-9])/;
+
 const schema = yup.object().shape({
   firstName: yup
     .string()
@@ -43,16 +47,26 @@ const schema = yup.object().shape({
     .required("必須項目です"),
   email: yup
     .string()
+    .lowercase()
     .email("正しいメールアドレスを指定してください。")
     .required("メールアドレスは必須項目です"),
+  password: yup
+    .string()
+    .matches(lowercaseRegex, "小文字を含めてください")
+    .matches(uppercaseRegex, "大文字を含めてください")
+    .matches(numericRegex, "数字を含めてください")
+    .min(8, "最低８文字含めてください")
+    .required("パスワードは必須項目です!"),
 });
 
 const SignUp = () => {
   const classes = useStyles();
 
   const [formKey, setFormKey] = useState(0);
-
-  const [values, setValue] = useState({
+  const [values, setValue] = useState<FormValues>({
+    firstName: "",
+    lastName: "",
+    email: "",
     password: "",
     showPassword: false,
   });
@@ -67,6 +81,9 @@ const SignUp = () => {
     alert(JSON.stringify(data));
     setFormKey((prev) => prev + 1);
     setValue({
+      firstName: "",
+      lastName: "",
+      email: "",
       password: "",
       showPassword: false,
     });
@@ -76,6 +93,15 @@ const SignUp = () => {
     setValue({
       ...values,
       showPassword: !values.showPassword,
+    });
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+
+    setValue({
+      ...values,
+      [name]: value,
     });
   };
 
@@ -101,11 +127,10 @@ const SignUp = () => {
                   helperText={errors.firstName?.message}
                   id='firstname'
                   inputRef={register}
-                  label='First Name'
+                  label='氏名'
                   name='firstName'
-                  // onChange={(e) =>
-                  //   setValue({ ...values, firstName: e.target.value })
-                  // }
+                  onChange={handleInputChange}
+                  value={values.firstName}
                   required
                   variant='outlined'
                 />
@@ -118,12 +143,11 @@ const SignUp = () => {
                   helperText={errors.lastName?.message}
                   id='lastname'
                   inputRef={register}
-                  label='Last Name'
+                  label='名前'
                   name='lastName'
-                  // onChange={(e) =>
-                  //   setValue({ ...values, lastName: e.target.value })
-                  // }
+                  onChange={handleInputChange}
                   required
+                  value={values.lastName}
                   variant='outlined'
                 />
               </Grid>
@@ -135,28 +159,27 @@ const SignUp = () => {
                   helperText={errors.email?.message}
                   id='email'
                   inputRef={register({ required: true })}
-                  label='Email Address'
+                  label='メールアドレス'
                   name='email'
-                  // onChange={(e) =>
-                  //   setValue({ ...values, email: e.target.value })
-                  // }
+                  onChange={handleInputChange}
                   required
+                  value={values.email}
                   variant='outlined'
                 />
               </Grid>
               <Grid item xs={12}>
                 <FormControl className={classes.inputField} variant='outlined'>
                   <InputLabel htmlFor='outlined-adornment-password'>
-                    Password
+                    パスワード
                   </InputLabel>
                   <OutlinedInput
                     id='password'
+                    error={!!errors.password}
                     name='password'
                     type={values.showPassword ? "text" : "password"}
-                    onChange={(e) =>
-                      setValue({ ...values, password: e.target.value })
-                    }
-                    inputRef={register({ required: true })}
+                    onChange={handleInputChange}
+                    inputRef={register}
+                    value={values.password}
                     endAdornment={
                       <InputAdornment position='end'>
                         <IconButton
@@ -172,16 +195,16 @@ const SignUp = () => {
                         </IconButton>
                       </InputAdornment>
                     }
-                    labelWidth={70}
+                    labelWidth={80}
                   />
                   {errors.password && (
-                    <div className='error'>Enter your password</div>
+                    <p className={classes.error}>{errors.password.message}</p>
                   )}
                 </FormControl>
                 {values.password ? (
                   <PasswordStrengthMeter password={values.password} />
                 ) : (
-                  <div></div>
+                  <></>
                 )}
               </Grid>
             </Grid>

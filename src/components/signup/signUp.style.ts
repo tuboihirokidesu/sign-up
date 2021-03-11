@@ -22,6 +22,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: "100%",
     marginBottom: "1rem",
   },
+  error: {
+    color: "#f44336",
+    marginLeft: "14px",
+    marginLight: "14px",
+    fontSize: "0.75rem",
+    marginTop: "3px",
+    textAlign: "left",
+    lineHeight: "1.66",
+  },
 }));
 
 export default useStyles;
